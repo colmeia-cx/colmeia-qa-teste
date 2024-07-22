@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Teste de QA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .hexagon-grid {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            justify-content: center;
+            /* Centraliza os hexágonos horizontalmente */
+            align-items: center;
+            /* Centraliza os hexágonos verticalmente */
+        }
+
+        .hexagon {
+            width: 60px;
+            height: 69px;
+            margin: 0;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .hexagon:nth-child(odd) {
+            margin-top: 34.5px;
+        }
+
+        .hexagon svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            fill: transparent;
+            stroke: #39ff14;
+            stroke-width: 2;
+        }
+
+        .logo {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            margin-top: 30px;
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .welcome-message {
+            position: relative;
+            z-index: 2;
+            margin-top: 150px;
+            color: #333;
+            text-align: center;
+            /* Centraliza o texto */
+        }
+
+        .welcome-message h1 {
+            font-size: 3em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .welcome-message p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .button-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            /* Centraliza os botões horizontalmente */
+        }
+
+        .button {
+            background-color: #4A4A4A;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 25px;
+            margin: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:hover {
+            background-color: #333333;
+            transform: translateY(-3px);
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            display: none;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+        }
+
+        .button:hover .tooltip {
+            display: block;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 4;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .popup.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .popup-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 400px;
+            max-width: 90%;
+            position: relative;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            /* Centraliza o texto dentro do pop-up */
+        }
+
+        .popup-content h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .popup-content .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: #999;
+        }
+
+        .popup-content .close:hover {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group button {
+            background-color: #4A4A4A;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group button:hover {
+            background-color: #333333;
+        }
+
+        .help-icon {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .help-icon:hover {
+            color: #333;
+        }
+
+        .help-tooltip {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            top: 25px;
+            right: 10px;
+            width: 200px;
+            z-index: 5;
+        }
+
+        .help-icon:hover+.help-tooltip {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hexagon-grid">
+        <!-- Adicionando hexágonos para cobrir a página -->
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <div class="hexagon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+            </svg></div>
+        <!-- Adicione mais hexágonos conforme necessário -->
+    </div>
+
+
+
+    <!-- Mensagem de boas-vindas e botões -->
+    <div class="welcome-message">
+        <h1>Bem-vindo ao Teste</h1>
+        <div class="button-container">
+            <button class="button" onclick="openPopup('login')">Login
+                <div class="tooltip">Abrir formulário de login</div>
+            </button>
+            <button class="button" onclick="openPopup('form')">Formulário
+                <div class="tooltip">Abrir formulário de contato</div>
+            </button>
+            <button class="button" onclick="openPopup('info')">Mais Info
+                <div class="tooltip">Abrir mais informações</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Pop-ups -->
+    <!-- Login Popup -->
+    <div class="popup" id="loginPopup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup('login')">&times;</span>
+            <h2>Login</h2>
+            <form>
+                <div class="form-group">
+                    <label for="loginEmail">E-mail:</label>
+                    <input type="email" id="loginEmail" name="loginEmail" required
+                           pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com\.br|gmail\.com|colmeia\.cx)$"
+                           title="Por favor, insira um endereço de email válido (ex: exemplo@gmail.com, exemplo@gmail.com.br, exemplo@colmeia.cx)">
+                    <i class="fas fa-info-circle help-icon"></i>
+                    <span id="emailError" style="color:red; display:none;">Por favor, insira um endereço de email válido. Os formatos aceitos são: exemplo@gmail.com, exemplo@gmail.com.br, ou exemplo@colmeia.cx.</span>
+                    <div class="help-tooltip">Digite seu e-mail de acesso.</div>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" required>
+                    <i class="fas fa-info-circle help-icon"></i>
+                    <div class="help-tooltip">Digite sua senha de acesso.</div>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Entrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contact Form Popup -->
+    <div class="popup" id="formPopup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup('form')">&times;</span>
+            <h2>Formulário de Contato</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" id="name" required>
+                    <i class="fas fa-info-circle help-icon"></i>
+                    <div class="help-tooltip">Digite seu nome completo.</div>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" required
+                        pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com\.br|gmail\.com|colmeia\.cx)$"
+                        title="Por favor, insira um endereço de email válido (ex: exemplo@gmail.com, exemplo@gmail.com.br, exemplo@colmeia.cx)">
+                    <i class="fas fa-info-circle help-icon"></i>
+                    <span id="emailError" style="color:red; display:none;">Por favor, insira um endereço de email
+                        válido. Os formatos aceitos são: exemplo@gmail.com, exemplo@gmail.com.br, ou
+                        exemplo@colmeia.cx.</span>
+                    <div class="help-tooltip">Digite seu endereço de e-mail.</div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Telefone</label>
+                    <input type="tel" id="phone" name="phone" required pattern="^\+?[1-9]\d{1,14}$"
+                        title="Por favor, insira um número de telefone válido. Formatos aceitos: +1234567890, 1234567890 (internacional e nacional)">
+                    <span id="phoneError" style="color:red; display:none;">Por favor, insira um número de telefone
+                        válido. Formatos aceitos: +1234567890, 1234567890 (internacional e nacional).</span>
+                    <i class="fas fa-info-circle help-icon"></i>
+                    <div class="help-tooltip">Digite seu número de telefone.</div>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensagem</label>
+                    <textarea id="message" rows="4" required></textarea>
+                    <i class="fas fa-info-circle help-icon"></i>
+                    <div class="help-tooltip">Digite sua mensagem ou pergunta.</div>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- More Info Popup -->
+    <div class="popup" id="infoPopup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup('info')">&times;</span>
+            <h2>Mais Informações</h2>
+            <p>
+                Vantagens dos testes automatizados
+                Rapidez: Os testes automatizados são muito mais rápidos do que os testes manuais, permitindo que os desenvolvedores obtenham resultados rapidamente.
+                Consistência: Os testes automatizados são consistentes e não estão sujeitos a erros humanos, garantindo que os resultados sejam precisos e confiáveis.
+                Cobertura: Os testes automatizados podem cobrir uma grande quantidade de cenários de teste, garantindo que o software seja testado de forma abrangente.
+                Economia: Os testes automatizados economizam tempo e recursos, permitindo que os desenvolvedores se concentrem em outras tarefas.
+                Melhoria da qualidade: Os testes automatizados ajudam a detectar erros e bugs no início do desenvolvimento, permitindo que os desenvolvedores os corrijam rapidamente e melhorem a qualidade do software.
+                Tipos de testes automatizados
+                Testes unitários: Verificam se as unidades de código individuais funcionam corretamente.
+                Testes de integração: Verificam se as unidades de código funcionam corretamente quando integradas.
+                Testes de sistema: Verificam se o sistema como um todo funciona corretamente.
+                Testes de aceitação: Verificam se o software atende aos requisitos do cliente.</p>
+        </div>
+    </div>
+
+    <script>
+        function openPopup(popupId) {
+            document.getElementById(popupId + 'Popup').classList.add('show');
+        }
+
+        function closePopup(popupId) {
+            document.getElementById(popupId + 'Popup').classList.remove('show');
+        }
+        document.getElementById('email').addEventListener('input', function (event) {
+            const emailInput = event.target;
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com\.br|gmail\.com|colmeia\.cx)$/;
+            const emailError = document.getElementById('emailError');
+
+            if (emailPattern.test(emailInput.value)) {
+                emailError.style.display = 'none';
+            } else {
+                emailError.style.display = 'block';
+            }
+        });
+        document.getElementById('loginEmail').addEventListener('input', function (event) {
+            const emailInput = event.target;
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com\.br|gmail\.com|colmeia\.cx)$/;
+            const emailError = document.getElementById('emailError');
+
+            if (emailPattern.test(emailInput.value)) {
+                emailError.style.display = 'none';
+            } else {
+                emailError.style.display = 'block';
+            }
+        });
+        document.getElementById('phone').addEventListener('input', function (event) {
+    const phoneInput = event.target;
+    const phonePattern = /^\+?[1-9]\d{1,14}$/;
+    const phoneError = document.getElementById('phoneError');
+
+    if (phonePattern.test(phoneInput.value)) {
+      phoneError.style.display = 'none';
+    } else {
+      phoneError.style.display = 'block';
+    }
+  });
+    </script>
+</body>
+
+</html>
